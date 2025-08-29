@@ -14,39 +14,6 @@ for (const btn of likeBtn) {
 }
 
 
-
-
-
-
-// call button -------------------------
-
-let coins = 100;
-const coinShow = document.getElementById("coinCount"); 
-const callButtons = document.querySelectorAll(".call-btn");
-
-coinShow.textContent = coins;
-
-callButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    if (coins < 20) {
-      alert("❌ Not enough coins to make a call!");
-      return;
-    }
-
-    // find the card related to this button
-    const card = btn.closest(".card");
-    const serviceName = card.querySelector(".service-name").textContent;
-    const serviceNumber = card.querySelector(".service-number").textContent;
-
-    // show alert
-    alert(`📞 Calling ${serviceName} at ${serviceNumber}`);
-    // deduct 20 coins
-    coins -= 20;
-    coinShow.textContent = coins;
-    })
-});
-
-
 // Copy Text ------------------------
 
 let copyCount = 0;
@@ -95,4 +62,52 @@ document.getElementById("btn-copy-9").addEventListener("click",function(){
   copyText("service-number-9");
 })
 
+
+// history and call --------------------------
+
+let coinCount = 100;
+let coinSection = document.getElementById("coinCount");
+
+
+const callBtn = document.querySelectorAll(".call-btn");
+for (const btn of callBtn) {
+  btn.addEventListener("click", function(){
+    if(coinCount < 20){
+      alert("Not enough coins!! Minimum 20 coins required to make a call.");
+      return;
+    }
+    coinCount = coinCount - 20;
+    coinSection.innerText = coinCount;
+
+    let card = this.parentNode.parentNode;
+
+    let allHeading2 = card.getElementsByTagName("h2");
+
+    let serviceName = allHeading2[0].innerText;
+    let serviceNumber = allHeading2[1].innerText;
+
+    let timeLive = new Date().toLocaleTimeString();
+
+    alert("Calling " + serviceName + ":- " + serviceNumber)
+
+    document.getElementById("history-section").innerHTML += `
+
+      <div class="flex justify-between items-center bg-[#f3f2f3] p-3 rounded-lg mt-2">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-semibold">${serviceName}</h2>
+                        <p class="text-gray-600 text-sm sm:text-base font-[500]">${serviceNumber}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm sm:text-base font-[500]">${timeLive}</p>
+                    </div>
+      </div>
+
+    `;
+    
+  })
+}
+
+document.getElementById("clear-btn").addEventListener("click", function(){
+  document.getElementById("history-section").innerHTML = "";
+})
 
